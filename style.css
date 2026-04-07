@@ -1,0 +1,309 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0014;
+  --calc-bg: #160025;
+  --panel: #1e0035;
+  --purple-deep: #2a0050;
+  --purple-mid: #5b0ea6;
+  --purple-glow: #9b30ff;
+  --purple-bright: #c77dff;
+  --white: #f0e6ff;
+  --white-dim: #c8b4e8;
+  --green: #00ff88;
+  --green-dim: #00c46a;
+  --green-glow: rgba(0,255,136,0.35);
+  --display-bg: #08000f;
+  --shadow-purple: 0 0 30px rgba(155,48,255,0.4);
+  --shadow-green: 0 0 18px rgba(0,255,136,0.5);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  overflow: hidden;
+}
+
+/* Fundo animado */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(91,14,166,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(155,48,255,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(0,255,136,0.05) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Grade de fundo */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(155,48,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155,48,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.calc-wrapper {
+  position: relative;
+  z-index: 1;
+  animation: floatIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(40px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.calculator {
+  background: var(--calc-bg);
+  border-radius: 28px;
+  border: 1.5px solid rgba(155,48,255,0.35);
+  box-shadow:
+    var(--shadow-purple),
+    0 40px 80px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(199,125,255,0.12);
+  padding: 28px;
+  width: 340px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brilho topo */
+.calculator::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--purple-glow), transparent);
+}
+
+/* Título */
+.calc-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--purple-bright);
+  text-align: center;
+  margin-bottom: 20px;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+/* Display */
+.display {
+  background: var(--display-bg);
+  border-radius: 16px;
+  border: 1px solid rgba(155,48,255,0.25);
+  padding: 18px 22px 14px;
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.display::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, rgba(155,48,255,0.04), transparent);
+}
+
+.display-expression {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--purple-bright);
+  opacity: 0.55;
+  text-align: right;
+  min-height: 18px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  transition: opacity 0.2s;
+}
+
+.display-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 38px;
+  font-weight: 900;
+  color: var(--white);
+  text-align: right;
+  letter-spacing: 2px;
+  line-height: 1;
+  transition: all 0.15s ease;
+  text-shadow: 0 0 20px rgba(199,125,255,0.4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.display-value.pop {
+  transform: scale(1.04);
+  text-shadow: 0 0 30px rgba(199,125,255,0.7);
+}
+
+/* Grade de botões */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.btn {
+  position: relative;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  height: 66px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  outline: none;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.btn:active {
+  transform: scale(0.92);
+}
+
+/* Botão número — branco */
+.btn-num {
+  background: linear-gradient(160deg, #ffffff 0%, #d4b8ff 100%);
+  color: #1a0030;
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.35),
+    0 2px 12px rgba(199,125,255,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.btn-num:hover {
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.35),
+    0 0 20px rgba(199,125,255,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.btn-num:active {
+  box-shadow:
+    0 2px 0 rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Botão operador — verde */
+.btn-op {
+  background: linear-gradient(160deg, #00ff88 0%, #00b860 100%);
+  color: #002918;
+  box-shadow:
+    0 6px 0 rgba(0,80,40,0.5),
+    var(--shadow-green),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.btn-op:hover {
+  background: linear-gradient(160deg, #20ffaa 0%, #00d870 100%);
+  box-shadow:
+    0 6px 0 rgba(0,80,40,0.5),
+    0 0 28px rgba(0,255,136,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.btn-op:active {
+  box-shadow:
+    0 2px 0 rgba(0,80,40,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+/* Botão igual — roxo especial */
+.btn-equal {
+  background: linear-gradient(160deg, #c77dff 0%, #7b2ff7 100%);
+  color: #fff;
+  box-shadow:
+    0 6px 0 rgba(60,0,140,0.5),
+    0 0 24px rgba(155,48,255,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+  font-size: 22px;
+}
+
+.btn-equal:hover {
+  background: linear-gradient(160deg, #d99aff 0%, #9040ff 100%);
+  box-shadow:
+    0 6px 0 rgba(60,0,140,0.5),
+    0 0 36px rgba(155,48,255,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.btn-equal:active {
+  box-shadow:
+    0 2px 0 rgba(60,0,140,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+/* Botão limpar — vermelho-roxo */
+.btn-clear {
+  background: linear-gradient(160deg, #ff5fa0 0%, #c2185b 100%);
+  color: #fff;
+  box-shadow:
+    0 6px 0 rgba(100,0,50,0.5),
+    0 0 18px rgba(255,95,160,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.btn-clear:hover {
+  box-shadow:
+    0 6px 0 rgba(100,0,50,0.5),
+    0 0 28px rgba(255,95,160,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+/* Botão duplo (zero) */
+.btn-double {
+  grid-column: span 2;
+  font-size: 18px;
+}
+
+/* Ripple */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-anim 0.5s linear;
+  background: rgba(255,255,255,0.25);
+  pointer-events: none;
+}
+
+@keyframes ripple-anim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* Rodapé */
+.calc-footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--purple-bright);
+  opacity: 0.3;
+}
